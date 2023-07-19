@@ -33,9 +33,9 @@ function Signup(){
               <Card sx={{height:"100%", width:"40%"}} variant="outlined">
                 <CardContent sx={{height:"100%", width:"100%"}}>
                   <Typography fontFamily={'"Times New Roman", Times, serif'} color="#007FFF" variant="h3" sx={{fontSize: { lg: 50, md: 40, sm: 25, xs: 10 },display:"flex", justifyContent:"center"}}>Signup</Typography>
-                   <TextField sx={{paddingTop:"8%",height:"20%", width:"45%"}} id="username" variant="outlined" onChange={(e)=>setUsername(e.target.value)} type="text" placeholder="username" />
+                   <TextField sx={{paddingTop:"12%",height:"20%", width:"45%"}} id="username" variant="outlined" onChange={(e)=>setUsername(e.target.value)} type="text" placeholder="username" />
                    <br/>
-                   <TextField sx={{paddingTop:"2%", height:"20%", width:"45%"}} id="password" variant="outlined" onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="password" />
+                   <TextField sx={{paddingTop:"1%", height:"20%", width:"45%"}} id="password" variant="outlined" onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="password" />
                    <br/>
                    <Box sx={{paddingTop:"1%", height:"6%", width:"auto"}}>
                    <Button onClick={()=>{register()}} variant="contained">Signup</Button>
