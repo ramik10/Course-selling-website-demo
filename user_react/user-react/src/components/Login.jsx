@@ -29,19 +29,19 @@ function Login(){
                 console.error(error);
               });}}
         
-            return ( <Grid item xs={10} sm={8} md={6} lg={6} xl={6} sx={{ height:{lg:"60vh",md:"52vh", sm:"25vh", xs:"20vh"}, width:"100vw", paddingTop:{lg:"10vh", md:"30vh", sm:"25vh"}, display:"flex", justifyContent:"center"}}> 
-            <Card sx={{height:"100%", width:"40%"}} variant="outlined">
+            return ( <Grid item xs={11} sm={8} md={6} lg={6} xl={6} sx={{ height:{lg:"60vh",md:"52vh", sm:"25vh", xs:"70vh"}, width:"100vw", paddingTop:{lg:"10vh", md:"30vh", sm:"25vh", xs:"25vh"}, display:"flex", justifyContent:"center"}}> 
+            <Card sx={{height:"100%", width:{lg:"40%",md:"40%", sm:"60%", xs:"70%"}}} variant="outlined">
               <CardContent sx={{height:"100%", width:"100%"}}>
-                <Typography fontFamily={'"Times New Roman", Times, serif'} color="#007FFF" variant="h3" sx={{fontSize: { lg: 50, md: 40, sm: 25, xs: 10 },display:"flex", justifyContent:"center"}}>Login</Typography>
+                <Typography fontFamily={'"Times New Roman", Times, serif'} color="#007FFF" variant="h3" sx={{fontSize: { lg: 50, md: 40, sm: 25, xs: 20 },display:"flex", justifyContent:"center"}}>Login</Typography>
                  <TextField sx={{paddingTop:"12%",height:"20%", width:"45%"}} id="username" variant="outlined" onChange={(e)=>setUsername(e.target.value)} type="text" placeholder="username" />
                  <br/>
-                 <TextField sx={{paddingTop:"1%", height:"20%", width:"45%"}} id="password" variant="outlined" onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="password" />
+                 <TextField sx={{paddingTop:{lg:"1%",md:"1%",sm:"5%", xs:"6%"}, height:"20%", width:"45%"}} id="password" variant="outlined" onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="password" />
                  <br/>
-                 <Box sx={{paddingTop:"1%", height:"6%", width:"auto"}}>
+                 <Box sx={{paddingTop:{lg:"1%",md:"1%",sm:"5%", xs:"6%"},paddingBottom:{sm:"3%", xs:"5%"}, height:"6%", width:"auto"}}>
                  <Button onClick={()=>{login()}} variant="contained">Login</Button>
                  </Box>
                 
-                 <p>Have not registered yet <a href="/signup">register</a></p>
+                 <p>Have not registered yet <a href="/signup">signup</a></p>
               </CardContent>
             </Card>
             </Grid>);
