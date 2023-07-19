@@ -5,6 +5,7 @@ import Card from '@mui/material/Card';
 import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import { Typography } from "@mui/material";
+import { Box, CardContent, Grid } from "@mui/material";
 
 function Login(){
     const [username, setUsername] = React.useState("");
@@ -28,18 +29,21 @@ function Login(){
                 console.error(error);
               });}}
         
-            return (
-            <div>
-              <Card style={{flexDirection: "column",marginTop:200, marginLeft:500, height:500, width:1000}} variant="outlined">
-                  <Typography fontFamily={'"Times New Roman", Times, serif'} color="#007FFF" variant="h3" style={{paddingTop:"10px", paddingLeft:"420px"}}>Login</Typography>
-                  <div style={{paddingLeft:"100px"}}>
-                  <div style={{paddingTop:'90px'}}><TextField style={{width:350, paddingRight:20}} id="outlined-basic" variant="outlined" onChange={(e)=>setUsername(e.target.value)} type="text" placeholder="username" /></div>
-                  <div style={{paddingTop:'30px'}}><TextField style={{width:350}} id="outlined-basic" variant="outlined" onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="password" /></div>
-                  <div style={{paddingTop:'10px'}}><Button onClick={()=>{login()}} variant="contained">Login</Button></div>
-                  <br/>
-                  <p>Not registered <a href="/signup">Signup</a></p>
-                </div>
-              </Card>
-         </div>)
+            return ( <Grid item xs={10} sm={8} md={6} lg={6} xl={6} sx={{ height:{lg:"60vh",md:"52vh", sm:"25vh", xs:"20vh"}, width:"100vw", paddingTop:{lg:"10vh", md:"30vh", sm:"25vh"}, display:"flex", justifyContent:"center"}}> 
+            <Card sx={{height:"100%", width:"40%"}} variant="outlined">
+              <CardContent sx={{height:"100%", width:"100%"}}>
+                <Typography fontFamily={'"Times New Roman", Times, serif'} color="#007FFF" variant="h3" sx={{fontSize: { lg: 50, md: 40, sm: 25, xs: 10 },display:"flex", justifyContent:"center"}}>Login</Typography>
+                 <TextField sx={{paddingTop:"12%",height:"20%", width:"45%"}} id="username" variant="outlined" onChange={(e)=>setUsername(e.target.value)} type="text" placeholder="username" />
+                 <br/>
+                 <TextField sx={{paddingTop:"1%", height:"20%", width:"45%"}} id="password" variant="outlined" onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="password" />
+                 <br/>
+                 <Box sx={{paddingTop:"1%", height:"6%", width:"auto"}}>
+                 <Button onClick={()=>{login()}} variant="contained">Login</Button>
+                 </Box>
+                
+                 <p>Have not registered yet <a href="/signup">register</a></p>
+              </CardContent>
+            </Card>
+            </Grid>);
 }
 export default Login;
