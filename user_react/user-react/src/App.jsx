@@ -7,9 +7,17 @@ import Courses from './components/Courses';
 import PurchasedCourses from './components/PurchasedCourses';
 import Navbar from './components/Navbar';
 
+
+// const Background = styled("div")({
+//   height: "100vh",
+//   backgroundColor: "#242424",
+//   //backgroundImage: `url("/WhatsApp Image 2023-07-11 at 6.37.02 PM.jpeg")`,
+//   //backgroundPosition: "center",
+//   backgroundSize: "contain",
+// });
+
 function App() {
   return (
-    <div style={{height:"100vh", backgroundImage:'url("/WhatsApp Image 2023-07-11 at 6.37.02 PM.jpeg")'}}>
     <Router>
       <Navbar/>
       <Routes>
@@ -21,7 +29,6 @@ function App() {
         <Route path="/courses/purchased" element={<PurchasedCourses />} />
       </Routes>
     </Router>
-    </div>
   )
 
 }

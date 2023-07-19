@@ -16,7 +16,7 @@ function PurchasedCourses(){
     },[]);
     return(
      <div>
-        <h1 style={{display:"flex", justifyContent:"center"}}>Your Purchased Courses</h1>
+        <h1 style={{color:"#a62c2b",display:"flex", justifyContent:"center"}}>Your Purchased Courses</h1>
         <Grid container spacing={2} style={{justifyContent:"center"}}>
             { purchasedCourses.map((c)=> <Course key ={c._id} title={c.title} description={c.description} imageLink={c.imageLink}/>)}
         </Grid> 
