@@ -25,7 +25,7 @@ function Courses() {
       });
   }, []);
   return(
-      <div>
+      <div style={{paddingTop:"5vh"}}>
         <h1 style={{color:"#a62c2b",display:"flex", justifyContent:"center"}}>Course Page</h1>
         <Grid container spacing={2} sx={{ display:"flex", justifyContent:"center"}}>
         {courses.map((c) =>

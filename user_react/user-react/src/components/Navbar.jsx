@@ -22,9 +22,9 @@ export default function Navbar() {
     }
   if (localStorage.getItem("token")) {
     return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar color="transparent" position="static">
-        <Toolbar style={{justifyContent:'flex-start'}}>
+    <Box sx={{ flexGrow: 1, width:"100vw", position:"fixed", top:0}}>
+      <AppBar color="transparent" position="static" sx={{width:"100%"}}>
+        <Toolbar sx={{justifyContent:'flex-start', width:"auto"}}>
           <Typography color="#2196f3" variant="h5" component="div" sx={{ flexGrow: 1 }}>
             COURSERA
           </Typography>
@@ -32,9 +32,9 @@ export default function Navbar() {
             <Typography color="#2196f3" style={{paddingTop:2}} variant="h6" component="div" sx={{ flexGrow: 1 }}>
               {localStorage.getItem("username")}
             </Typography>
-            <Button style={{padding:"0px",paddingLeft:"10px", color:"#2196f3"}}onClick={courses} >Courses</Button>
-            <Button style={{color:"#2196f3"}}onClick={mycourses} >MyCourses</Button>
-            <Button style={{color:"#2196f3"}}onClick={logout} >Logout</Button>
+            <Button sx={{padding:"0px",paddingLeft:"10px", color:"#2196f3"}}onClick={courses} >Courses</Button>
+            <Button sx={{color:"#2196f3"}}onClick={mycourses} >MyCourses</Button>
+            <Button sx={{color:"#2196f3"}}onClick={logout} >Logout</Button>
           </div>
         </Toolbar>
       </AppBar>
