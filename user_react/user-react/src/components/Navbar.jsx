@@ -25,16 +25,16 @@ export default function Navbar() {
     <Box sx={{ flexGrow: 1, width:"100vw", position:"fixed", top:0}}>
       <AppBar color="transparent" position="static" sx={{width:"100%"}}>
         <Toolbar sx={{justifyContent:'flex-start', width:"auto"}}>
-          <Typography color="#2196f3" variant="h5" component="div" sx={{ flexGrow: 1 }}>
+          <Typography color="#2196f3" variant="h9" component="div" sx={{ display:{xs:"none", lg:"block"}, flexGrow:1}}>
             COURSERA
           </Typography>
           <div style={{display: 'flex', justifyContent:"flex-end"}}>
-            <Typography color="#2196f3" style={{paddingTop:2}} variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography xs="auto" color="#2196f3" variant="h3" component="div" sx={{fontSize:{lg:"140%", xs:"100%"}, flexGrow: 1,paddingTop:{lg:"1.5%", xs:"3%"}, paddingLeft:{lg:"10px", xs:"5px"}, paddingRight:{lg:"30px", xs:"0px"} }}>
               {localStorage.getItem("username")}
             </Typography>
-            <Button sx={{padding:"0px",paddingLeft:"10px", color:"#2196f3"}}onClick={courses} >Courses</Button>
-            <Button sx={{color:"#2196f3"}}onClick={mycourses} >MyCourses</Button>
-            <Button sx={{color:"#2196f3"}}onClick={logout} >Logout</Button>
+            <Button sx={{paddingLeft:{lg:"10px", xs:"6px"}, color:"#2196f3"}}onClick={courses} >Courses</Button>
+            <Button sx={{paddingLeft:{lg:"10px", xs:"1px"},color:"#2196f3"}}onClick={mycourses} >MyCourses</Button>
+            <Button sx={{paddingLeft:{lg:"10px", xs:"1px"},color:"#2196f3"}}onClick={logout} >Logout</Button>
           </div>
         </Toolbar>
       </AppBar>
