@@ -26,7 +26,7 @@ function Courses() {
   }, []);
   return(
       <div style={{paddingTop:"5vh"}}>
-        <h1 style={{color:"#a62c2b",display:"flex", justifyContent:"center"}}>Course Page</h1>
+        <Typography color={{lg:"#242424", xs:"#e5b000"}} variant="h3" component="div" sx={{paddingBottom:{lg:4, xs:3}, display:"flex", justifyContent:"center", fontSize:{lg:"300%", xs:"150%"}}}>Course Page</Typography>
         <Grid container spacing={2} sx={{ display:"flex", justifyContent:"center"}}>
         {courses.map((c) =>
           <Course key={c._id} id={c._id} title={c.title} description={c.description} price={c.price} imageLink={c.imageLink} published={c.published} />)}

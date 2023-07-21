@@ -6,6 +6,7 @@ import Home from './components/Home';
 import Courses from './components/Courses';
 import PurchasedCourses from './components/PurchasedCourses';
 import Navbar from './components/Navbar';
+import { Box } from '@mui/system';
 
 
 // const Background = styled("div")({
@@ -19,7 +20,9 @@ import Navbar from './components/Navbar';
 function App() {
   return (
     <Router>
-      <Navbar/>
+      <Box sx={{ display: 'flex' }}>
+      <Navbar />
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
@@ -28,6 +31,8 @@ function App() {
         <Route path="/courses/:courseId" element={<Purchase />} />
         <Route path="/courses/purchased" element={<PurchasedCourses />} />
       </Routes>
+      </Box>
+      </Box>
     </Router>
   )
 
