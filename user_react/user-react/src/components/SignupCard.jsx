@@ -11,7 +11,6 @@ import {
 } from 'recoil';
 import { usernameState } from "../atoms/username";
 import { passwordState } from "../atoms/password";
-import { tokenPresentState } from '../atoms/tokenPresent';
 
 
 function UsernameBox(){
@@ -31,6 +30,7 @@ function PasswordBox(){
 function SignupButton(props){
     const username = useRecoilValue(usernameState);
     const password = useRecoilValue(passwordState);
+    const setIsLoading = useSetRecoilState(passwordState);
     // const tokenPresent = useSetRecoilState(tokenPresentState);
     const navigate = useNavigate();
     function register(){
@@ -43,13 +43,12 @@ function SignupButton(props){
          { username, password}
       ).then((res)=>{
           const token = res.data.authorization;
-          const username = res.data.username;
           localStorage.setItem("token", token)
-          localStorage.setItem("username", username)
+          setIsLoading(false)
           // tokenPresent(true)
           console.log(res.status)
           console.log(res.data.message)
-          window.location.href = "/courses"
+          navigate("/courses")
       }).catch((error) => {
           console.error(error);
         });}}

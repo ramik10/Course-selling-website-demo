@@ -122,13 +122,21 @@ app.post('/users/signup', async(req, res) => {
     res.json({ message: 'User created successfully', "authorization":token, "username": user.username });
   }
 });
+app.get('/users/me',authenticateJwt, (req, res) => {
+  const user = req.user.username;
+  if (user) {
+    res.json({ message: 'User found', "username": user });
+  } else {
+    res.status(404).json({ message: 'User not found' });
+  }
+});
 
 app.post('/users/login', async(req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({username, password});
   if (user) {
     const token = generateJwt(user);
-    res.json({ message: 'Logged in successfully', "authorization":token, "username": user.username });
+    res.json({ message: 'Logged in successfully', "authorization":token });
   } else {
     res.status(403).json({ message: 'User authentication failed' });
   }

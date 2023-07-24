@@ -14,11 +14,15 @@ import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import SchoolIcon from '@mui/icons-material/School';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { isLoadingState, userPresentState } from '../atoms/userPresentState';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import axios from 'axios';
                                                                                                                                                           
 const drawerWidth = 240;
 
 export default function Navbar() {
   const navigate = useNavigate();
+  
     return (
     
         <><AppBar  position="fixed" sx={{bgcolor:"#242424", zIndex: (theme) => theme.zIndex.drawer + 1 }}>
@@ -71,12 +75,17 @@ export default function Navbar() {
 
   );}
 function Logout(){
-  if (localStorage.getItem("token")) {
+  const isLoading = useRecoilValue(isLoadingState);
+  const setUser = useSetRecoilState(userPresentState);
+  const setIsLoading = useSetRecoilState(isLoadingState);
+  const navigate = useNavigate();
+  if (!isLoading) {
     return (
       <ListItem key={"Logout"} disablePadding>
                   <ListItemButton onClick={()=>{localStorage.removeItem("token")
-                        localStorage.removeItem("username")
-                        window.location.href = "/login"}}>
+                        setUser(null)
+                        setIsLoading(true)
+                        navigate("/login")}}>
                     <ListItemIcon>
                       <ExitToAppIcon />
                     </ListItemIcon>
@@ -96,10 +105,14 @@ function LoggedOut(){
 }
 
 function LogoutButton(){
+  const setUser = useSetRecoilState(userPresentState);
+  const navigate = useNavigate();
+  const setIsLoading = useSetRecoilState(isLoadingState);
   function logout(){
     localStorage.removeItem("token")
-    localStorage.removeItem("username")
-    window.location.href = "/login"
+    setUser(null)
+    setIsLoading(true)
+    navigate("/")
   }
   return(
     <Button sx={{paddingLeft:{lg:"10px", xs:"1px"},color:"#e5b000"}}onClick={logout}>Logout</Button>
@@ -114,10 +127,18 @@ function CoursesButton(){
   return(<Button sx={{paddingLeft:{lg:"10px", xs:"1px"},color:"#e5b000"}} onClick={()=>{navigate("/courses")}}>Courses</Button>)
 }
 function TokenDepend(){
- 
-  if (localStorage.getItem("token")) {
+  const setUser = useSetRecoilState(userPresentState);
+  const setIsLoading = useSetRecoilState(isLoadingState);
+  axios.get(import.meta.env.VITE_URL_KEYR+"/users/me",{
+            headers:{"authorization":"Bearer "+ localStorage.getItem("token")}
+  }).then((res)=>{
+    const username = res.data.username;
+    setUser(username);
+    setIsLoading(false);})
+  const isLoading = useRecoilValue(isLoadingState);
+  if (!isLoading) {
     return (
-      <LoggedIn/>
+      <LoggedIn />
     )}
   else{
       return(
@@ -127,12 +148,13 @@ function TokenDepend(){
   }
 
 function LoggedIn(){
-  const username = localStorage.getItem("username")
+  const username = useRecoilValue(userPresentState);
   return(
     <div style={{display: 'flex', justifyContent:"flex-end"}}>
-            <Typography xs="auto" color="#2196f3" variant="h3" component="div" sx={{fontSize:{lg:"140%", xs:"100%"}, flexGrow: 1,paddingTop:{lg:"1.5%", xs:"3%"}, paddingLeft:{lg:"10px", xs:"5px"}, paddingRight:{lg:"30px", xs:"0px"} }}>
+            {username && <Typography xs="auto" color="#2196f3" variant="h3" component="div" sx={{fontSize:{lg:"140%", xs:"100%"}, flexGrow: 1,paddingTop:{lg:"1.5%", xs:"3%"}, paddingLeft:{lg:"10px", xs:"5px"}, paddingRight:{lg:"30px", xs:"0px"} }}>
               {username}
             </Typography>
+            }
             <Box sx={{paddingLeft:2, display:{lg:"none", xs:"block"}}} >
             <CoursesButton />
             <MycoursesButton />
