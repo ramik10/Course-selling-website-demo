@@ -5,10 +5,12 @@ import CardContent from '@mui/material/CardContent';
 import { Button, CardActions, Grid, Typography} from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { coursesState } from '../atoms/courses';
 
 
 function Courses() {
-  const [courses, setCourses] = React.useState([]);
+  const setCourses = useSetRecoilState(coursesState);
 
   React.useEffect(() => {
     axios.get(import.meta.env.VITE_URL_KEYR+"/users/courses", {
@@ -27,25 +29,30 @@ function Courses() {
   return(
       <div style={{paddingTop:"5vh"}}>
         <Typography color={{lg:"#242424", xs:"#e5b000"}} variant="h3" component="div" sx={{paddingBottom:{lg:4, xs:3}, display:"flex", justifyContent:"center", fontSize:{lg:"300%", xs:"150%"}}}>Course Page</Typography>
-        <Grid container spacing={2} sx={{ display:"flex", justifyContent:"center"}}>
-        {courses.map((c) =>
-          <Course key={c._id} id={c._id} title={c.title} description={c.description} price={c.price} imageLink={c.imageLink} published={c.published} />)}
-        </Grid>
+        <Grid_new/>
       </div>
   );
 }
-
+function Grid_new(){
+  const courses = useRecoilValue(coursesState);
+  return(
+    <Grid container spacing={2} sx={{ display:"flex", justifyContent:"center"}}>
+        {courses.map((c) =>
+          <Course key={c._id} id={c._id} title={c.title} description={c.description} price={c.price} imageLink={c.imageLink} published={c.published} />)}
+        </Grid>
+  )
+}
 function Course(props) {
   const navigate = useNavigate();
   const expand = () => {
     navigate("/courses/" + props.id);
   }
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-    <Card>
-      <div style={{height:250, width:"auto", display:"flex", justifyContent:"center"}}>
+    <Grid item xs={12} sm={6} md={5} lg={3}>
+    <Card sx={{height:"45vh"}}>
+      <div style={{height:"60%", width:"100%", display:"flex", justifycontent:"center"}}>
       <CardMedia
-        sx={{height:"100%",width:350}}
+        sx={{height:"100%",width:"100%"}}
         image={props.imageLink}
         title="green iguana"
       />
