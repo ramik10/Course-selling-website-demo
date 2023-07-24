@@ -85,7 +85,7 @@ function Logout(){
                   <ListItemButton onClick={()=>{localStorage.removeItem("token")
                         setUser(null)
                         setIsLoading(true)
-                        navigate("/login")}}>
+                        window.location.href="/"}}>
                     <ListItemIcon>
                       <ExitToAppIcon />
                     </ListItemIcon>
@@ -112,7 +112,7 @@ function LogoutButton(){
     localStorage.removeItem("token")
     setUser(null)
     setIsLoading(true)
-    navigate("/")
+    window.location.href="/"
   }
   return(
     <Button sx={{paddingLeft:{lg:"10px", xs:"1px"},color:"#e5b000"}}onClick={logout}>Logout</Button>
