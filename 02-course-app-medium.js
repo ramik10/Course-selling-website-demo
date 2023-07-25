@@ -13,12 +13,13 @@ const app = express();
 
 app.use(cookieParser());
 
-app.use(cors("*",
-  {
-    origin: true,
-    credentials: true
-  }
-));
+// app.use(cors("*",
+//   {
+//     origin: true,
+//     credentials: true
+//   }
+// ));
+app.use(cors());
 // app.use(
 //   cors({origin: "https://react-and-backend.vercel.app", credentials: true})
 // );
