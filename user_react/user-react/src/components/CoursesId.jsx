@@ -16,9 +16,7 @@ function Purchase(){
     React.useEffect(() => {
         axios
           .get(import.meta.env.VITE_URL_KEYR+"/users/courses/"+courseId, {
-            headers: {
-              authorization: "Bearer "+localStorage.getItem("token"),
-            },
+            withCredentials: true,
           })
           .then((res) => {
             // console.log(res.data);
@@ -29,8 +27,8 @@ function Purchase(){
     
     
     return(
-        <Grid item xs={10} sm={8} md={6} lg={6} xl={6} sx={{height:"72%", paddingTop:10,rowGap:2, columnGap:2, display:"flex", justifyContent:"center"}}>
-          <Card raised sx={{height:"70vh", width:"auto"}}>
+        <Grid item xs={10} sm={8} md={6} lg={4} xl={6} sx={{paddingTop:10,rowGap:2, columnGap:2, display:"flex", justifyContent:"center"}}>
+          <Card raised sx={{height:"auto",width:{xs:"100%",lg:"50%"}}}>
             <CardUI/>
           </Card>
         </Grid>
@@ -42,23 +40,21 @@ function CardUI() {
   const purchase=()=>{
     // console.log(localStorage.getItem("token"))
     axios.post(import.meta.env.VITE_URL_KEYR+"/users/courses/"+courseId,null,{
-        headers: {
-            "authorization": "Bearer " + localStorage.getItem("token")
-          }
+        withCredentials: true,
     }).then((response)=>{
         alert(response.data.message);
     })}
   return (
-    <><Grid sx={{ height: "70%", width: "auto", display: "flex", justifyContent: "center"}}>
+    <><Grid sx={{ height:{xs:"55%", lg:"65%"}, display: "flex", justifyContent: "center"}}>
       <CardMedia
         component="img"
         image={course.imageLink}
-        sx={{ height: "100%", width: "auto" }} />
-    </Grid><CardContent sx={{ height: "15%", width: "auto" }}>
+        sx={{ height: "100%" }} />
+    </Grid><CardContent sx={{ height: {xs:"20%",lg:"20%"}, width: "auto" }}>
         <Typography gutterBottom variant="h5" component="div">{course.title}</Typography>
         <Typography variant="body2" color="text.secondary">{course.description}</Typography>
-        <Typography variant='h8' color="inherit">{course.price}</Typography>
-      </CardContent><CardActions sx={{ width: "20%", height: "auto" }}>
+        <Typography variant='h8' color="inherit">{"price: "+course.price}</Typography>
+      </CardContent><CardActions sx={{ width: "auto", height: "10%" }}>
         <Button onClick={purchase} variant="contained">purchase</Button>
       </CardActions></>
   )

@@ -11,7 +11,7 @@ function PurchasedCourses(){
     const setpurchasedCourses=useSetRecoilState(purchasedState);
     React.useEffect(()=>{
         axios.get(import.meta.env.VITE_URL_KEYR+"/users/purchasedCourses",{
-            headers:{"authorization":"Bearer "+ localStorage.getItem("token")}
+            withCredentials: true
         }).then((res)=>{
             // console.log(res.data)
             setpurchasedCourses(res.data.purchasedCourses);

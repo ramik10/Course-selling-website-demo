@@ -78,14 +78,15 @@ function Logout(){
   const isLoading = useRecoilValue(isLoadingState);
   const setUser = useSetRecoilState(userPresentState);
   const setIsLoading = useSetRecoilState(isLoadingState);
-  const navigate = useNavigate();
   if (!isLoading) {
     return (
       <ListItem key={"Logout"} disablePadding>
-                  <ListItemButton onClick={()=>{localStorage.removeItem("token")
+                  <ListItemButton onClick={()=>{
+                        axios.get(import.meta.env.VITE_URL_KEYR+"/users/logout",{withCredentials:true}).then((res)=>{
+                        console.log(res.data.message)
                         setUser(null)
                         setIsLoading(true)
-                        window.location.href="/"}}>
+                        window.location.href="/"})}}>
                     <ListItemIcon>
                       <ExitToAppIcon />
                     </ListItemIcon>
@@ -106,14 +107,13 @@ function LoggedOut(){
 
 function LogoutButton(){
   const setUser = useSetRecoilState(userPresentState);
-  const navigate = useNavigate();
   const setIsLoading = useSetRecoilState(isLoadingState);
   function logout(){
-    localStorage.removeItem("token")
-    setUser(null)
-    setIsLoading(true)
-    window.location.href="/"
-  }
+      axios.get(import.meta.env.VITE_URL_KEYR+"/users/logout",{withCredentials:true}).then((res)=>{
+      console.log(res.data.message)
+      setUser(null)
+      setIsLoading(true)
+      window.location.href="/"})};
   return(
     <Button sx={{paddingLeft:{lg:"10px", xs:"1px"},color:"#e5b000"}}onClick={logout}>Logout</Button>
   )
@@ -129,9 +129,7 @@ function CoursesButton(){
 function TokenDepend(){
   const setUser = useSetRecoilState(userPresentState);
   const setIsLoading = useSetRecoilState(isLoadingState);
-  axios.get(import.meta.env.VITE_URL_KEYR+"/users/me",{
-            headers:{"authorization":"Bearer "+ localStorage.getItem("token")}
-  }).then((res)=>{
+  axios.get(import.meta.env.VITE_URL_KEYR+"/users/me",{withCredentials:true}).then((res)=>{
     const username = res.data.username;
     setUser(username);
     setIsLoading(false);})

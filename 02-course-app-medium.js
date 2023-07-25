@@ -3,11 +3,25 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const app = express();
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "http://localhost:5173"); // update to match the domain you will make the request from
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 
+app.use(cookieParser());
 
-app.use(cors());
-
+// app.use(cors("*",
+//   {
+//     origin: true,
+//     credentials: true
+//   }
+// ));
+app.use(
+  cors({origin: "https://react-and-backend.vercel.app", credentials: true})
+);
 app.use(express.json());
 
 const adminSchema = new mongoose.Schema({
@@ -43,11 +57,9 @@ const generateJwt = (user) => {
 
 const authenticateJwt = (req, res, next) => {
   // console.log(req.headers);
-  const authHeader = req.headers.authorization;
+  const token = req.cookies.access_token;
 
-  if (authHeader) {
-    const token = authHeader.split(' ')[1];
-
+  if (token) {
     jwt.verify(token, secretKey, (err, user) => {
       if (err) {
         return res.sendStatus(403);
@@ -119,7 +131,17 @@ app.post('/users/signup', async(req, res) => {
     const newUser = new User({"username":user.username, "password":user.password});
     await newUser.save();
     const token = generateJwt(user);
-    res.json({ message: 'User created successfully', "authorization":token, "username": user.username });
+    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000}).json({ message: 'User created successfully'});
+  }
+});
+app.post('/users/login', async(req, res) => {
+  const { username, password } = req.body;
+  const user = await User.findOne({username, password});
+  if (user) {
+    const token = generateJwt(user);
+    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000}).json({ message: 'Logged in successfully' })
+  } else {
+    res.status(403).json({ message: 'User authentication failed' });
   }
 });
 app.get('/users/me',authenticateJwt, (req, res) => {
@@ -131,16 +153,10 @@ app.get('/users/me',authenticateJwt, (req, res) => {
   }
 });
 
-app.post('/users/login', async(req, res) => {
-  const { username, password } = req.body;
-  const user = await User.findOne({username, password});
-  if (user) {
-    const token = generateJwt(user);
-    res.json({ message: 'Logged in successfully', "authorization":token });
-  } else {
-    res.status(403).json({ message: 'User authentication failed' });
-  }
+app.get('/users/logout',authenticateJwt, (req, res) => {
+  res.clearCookie("access_token",{httpOnly:true}).json({ message: 'Logged out successfully' });
 });
+
 
 app.get('/users/courses', authenticateJwt, async(req, res) => {
   res.json(await Course.find({published: true}));
