@@ -40,7 +40,7 @@ function SignupButton(props){
      
       if((username!=="")&&(password!=="")){
       axios.post(import.meta.env.VITE_URL_KEYR+"/users/"+props.ButtonName.toLowerCase(),
-         { username, password}
+         { username, password},{withCredentials:true}
       ).then((res)=>{
           const token = res.data.authorization;
           localStorage.setItem("token", token)

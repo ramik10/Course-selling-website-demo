@@ -13,7 +13,7 @@ function Courses() {
   const setCourses = useSetRecoilState(coursesState);
 
   React.useEffect(() => {
-    axios.get(import.meta.env.VITE_URL_KEYR+"/users/courses")
+    axios.get(import.meta.env.VITE_URL_KEYR+"/users/courses",{withCredentials: true})
       .then(res => {
         // console.log(res.data)
         setCourses(res.data);

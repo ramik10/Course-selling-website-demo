@@ -16,11 +16,11 @@ app.use(cookieParser());
 // app.use(cors("*",
 //   {
 //     origin: true,
-//     credentials: false
+//     credentials: true
 //   }
 // ));
 app.use(
-  cors()
+  cors({origin: "https://react-and-backend.vercel.app", credentials: true})
 );
 app.use(express.json());
 
@@ -153,8 +153,8 @@ app.get('/users/me',authenticateJwt, (req, res) => {
   }
 });
 
-app.get('/users/logout', (req, res) => {
-  res.clearCookie("access_token",{httpOnly:true, sameSite:"none", secure:false}).json({ message: 'Logged out successfully' });
+app.get('/users/logout',authenticateJwt, (req, res) => {
+  res.clearCookie("access_token",{httpOnly:true}).json({ message: 'Logged out successfully' });
 });
 
 
