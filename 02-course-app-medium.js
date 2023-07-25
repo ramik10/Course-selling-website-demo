@@ -19,10 +19,13 @@ app.use(cookieParser());
 //     credentials: true
 //   }
 // ));
-app.use(cors());
-// app.use(
-//   cors({origin: "https://react-and-backend.vercel.app", credentials: true})
-// );
+// app.use(cors());
+app.use(
+  cors({origin: "https://react-and-backend.vercel.app/", credentials: true})
+);
+app.use(
+  cors({origin: "https://react-and-backend-git-main-ramik10.vercel.app/", credentials: true})
+);
 app.use(express.json());
 
 const adminSchema = new mongoose.Schema({
