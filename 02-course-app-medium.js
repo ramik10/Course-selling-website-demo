@@ -23,9 +23,9 @@ app.use(cookieParser());
 app.use(
   cors({origin: "https://react-and-backend.vercel.app", credentials: true})
 );
-app.use(
-  cors({origin: "https://react-and-backend-git-main-ramik10.vercel.app", credentials: true})
-);
+// app.use(
+//   cors({origin: "https://react-and-backend-git-main-ramik10.vercel.app", credentials: true})
+// );
 app.use(express.json());
 
 const adminSchema = new mongoose.Schema({
@@ -135,7 +135,7 @@ app.post('/users/signup', async(req, res) => {
     const newUser = new User({"username":user.username, "password":user.password});
     await newUser.save();
     const token = generateJwt(user);
-    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000}).json({ message: 'User created successfully'});
+    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000,secure:true}).json({ message: 'User created successfully'});
   }
 });
 app.post('/users/login', async(req, res) => {
@@ -143,7 +143,7 @@ app.post('/users/login', async(req, res) => {
   const user = await User.findOne({username, password});
   if (user) {
     const token = generateJwt(user);
-    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000}).json({ message: 'Logged in successfully' })
+    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000, secure:true}).json({ message: 'Logged in successfully' })
   } else {
     res.status(403).json({ message: 'User authentication failed' });
   }
