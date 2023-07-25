@@ -21,10 +21,10 @@ app.use(cookieParser());
 // ));
 // app.use(cors());
 app.use(
-  cors({origin: "https://react-and-backend.vercel.app/", credentials: true})
+  cors({origin: "https://react-and-backend.vercel.app", credentials: true})
 );
 app.use(
-  cors({origin: "https://react-and-backend-git-main-ramik10.vercel.app/", credentials: true})
+  cors({origin: "https://react-and-backend-git-main-ramik10.vercel.app", credentials: true})
 );
 app.use(express.json());
 
