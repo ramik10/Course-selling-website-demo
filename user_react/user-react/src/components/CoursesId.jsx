@@ -16,9 +16,7 @@ function Purchase(){
     React.useEffect(() => {
         axios
           .get(import.meta.env.VITE_URL_KEYR+"/users/courses/"+courseId, {
-            headers: {
-              authorization: "Bearer "+localStorage.getItem("token"),
-            },
+            withCredentials: true,
           })
           .then((res) => {
             // console.log(res.data);
@@ -42,9 +40,7 @@ function CardUI() {
   const purchase=()=>{
     // console.log(localStorage.getItem("token"))
     axios.post(import.meta.env.VITE_URL_KEYR+"/users/courses/"+courseId,null,{
-        headers: {
-            "authorization": "Bearer " + localStorage.getItem("token")
-          }
+        withCredentials: true,
     }).then((response)=>{
         alert(response.data.message);
     })}
