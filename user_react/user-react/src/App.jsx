@@ -25,8 +25,6 @@ function App() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/courses/:courseId" element={<Purchase />} />
         <Route path="/courses/purchased" element={<PurchasedCourses />} />
