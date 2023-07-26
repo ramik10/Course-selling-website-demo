@@ -143,7 +143,7 @@ app.post('/users/login', async(req, res) => {
   const user = await User.findOne({username, password});
   if (user) {
     const token = generateJwt(user);
-    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000,domain:"https://react-and-backend.vercel.app",secure:true,sameSite:'none'}).json({ message: 'Logged in successfully' })
+    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000,secure:true,sameSite:'none'}).json({ message: 'Logged in successfully' })
   } else {
     res.status(403).json({ message: 'User authentication failed' });
   }
