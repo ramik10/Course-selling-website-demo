@@ -17,6 +17,10 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { isLoadingState, userPresentState } from '../atoms/userPresentState';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import axios from 'axios';
+import SignupCard from "./SignupCard";
+import Dialog from "@mui/material/Dialog";
+import { useRecoilState } from 'recoil';
+import { onCloseLogin,onCloseSignup } from '../atoms/onCloseButton';
                                                                                                                                                           
 const drawerWidth = 240;
 
@@ -98,10 +102,30 @@ function Logout(){
  
 
 function LoggedOut(){
-  const navigate = useNavigate();
+  const [open, setOpen] = useRecoilState(onCloseLogin);
+  const [open2, setOpen2] = useRecoilState(onCloseSignup);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleClickOpen2 = () => {
+    setOpen2(true);
+  };
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
   return(   
-       <><Button style={{ color: "#2196f3" }} onClick={()=>{navigate("/login")}}>Login</Button>
-       <Button style={{ color: "#2196f3" }} onClick={()=>{navigate("/signup")}}>Signup</Button></>
+       <><Button style={{ color: "#2196f3" }} onClick={handleClickOpen}>Login</Button>
+       <Button style={{ color: "#2196f3" }} onClick={handleClickOpen2}>Signup</Button>
+       <Dialog PaperProps={{ sx: { borderRadius: "35px" } }} maxWidth="sm" fullWidth="true" onClose={handleClose} open={open}>
+       <SignupCard ButtonName="Login" Redirect="signup" Message="Have not registered yet"/>
+       </Dialog>
+       <Dialog PaperProps={{ sx: { borderRadius: "35px" } }} maxWidth="sm" fullWidth onClose={handleClose2} open={open2}>
+       <SignupCard ButtonName="Signup" Redirect="login" Message="Already registered"/>
+       </Dialog>
+       </>
   )
 }
 

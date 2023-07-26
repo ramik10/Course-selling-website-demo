@@ -45,7 +45,7 @@ function Course(props) {
   }
   return (
     <Grid item xs={12} sm={6} md={5} lg={3}>
-    <Card sx={{height:"45vh"}}>
+    <Card sx={{borderRadius:"50px", height:"45vh"}}>
       <div style={{height:"60%", width:"100%", display:"flex", justifycontent:"center"}}>
       <CardMedia
         sx={{height:"100%",width:"100%"}}
@@ -59,7 +59,7 @@ function Course(props) {
         <Typography variant='h8'color="inherit">{props.price}</Typography>
       </CardContent>
       <CardActions>
-        <Button onClick={expand} variant="contained">select</Button>
+        <Button sx={{marginLeft:"38%", borderRadius:"16px"}} onClick={expand} variant="contained">select</Button>
       </CardActions>
       
     </Card>

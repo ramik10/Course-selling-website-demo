@@ -35,7 +35,7 @@ function PurchasedCourses(){
     function Course(props){
         return(
             <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Card sx={{height:"42vh"}}>
+            <Card sx={{borderRadius:"50px", height:"42vh"}}>
               <div style={{height:"60%", width:"100%", display:"flex", justifycontent:"center"}}>
               <CardMedia
                 sx={{height:"100%",width:"100%"}}
@@ -47,7 +47,7 @@ function PurchasedCourses(){
                 <Typography variant="body2" color="text.secondary">{props.description}</Typography>
               </CardContent>
               <CardActions>
-                <Button variant="contained" onClick={()=>{alert("will add this feature in future!")}}>Course details</Button>
+                <Button sx={{marginLeft:"27%", borderRadius:"16px"}} variant="contained" onClick={()=>{alert("will add this feature in future!")}}>Course details</Button>
               </CardActions>
               
             </Card>

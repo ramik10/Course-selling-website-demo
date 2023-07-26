@@ -12,18 +12,31 @@ import {
 import { usernameState } from "../atoms/username";
 import { passwordState } from "../atoms/password";
 
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+import { onCloseLogin, onCloseSignup } from "../atoms/onCloseButton";
+import Link from '@mui/material/Link'
+
 
 function UsernameBox(){
     const setUsername = useSetRecoilState(usernameState);
     return(
-      <TextField sx={{paddingTop:"12%",height:"20%", width:"45%"}} id="username" variant="outlined" onChange={(e)=>setUsername(e.target.value)} type="text" placeholder="username" />
+      <TextField InputProps={{
+        style: {
+          borderRadius: "40px",
+        }
+      }} sx={{paddingLeft:"4%", paddingTop:"8%",height:"20%", width:"90%"}} id="username" variant="outlined" onChange={(e)=>setUsername(e.target.value)} type="text" placeholder="username" />
     );
   }
   
 function PasswordBox(){
      const setPassword = useSetRecoilState(passwordState);
     return(
-      <TextField sx={{paddingTop:{lg:"1%",md:"1%",sm:"5%", xs:"6%"}, height:"20%", width:"45%"}} id="password" variant="outlined" onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="password" />
+      <TextField InputProps={{
+        style: {
+          borderRadius: "40px",
+        }
+      }} sx={{paddingLeft:"4%", paddingTop:{lg:"2%",md:"1%",sm:"5%", xs:"6%"}, height:"20%", width:"90%"}} id="password" variant="outlined" onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="password" />
     );
   }
 
@@ -53,27 +66,57 @@ function SignupButton(props){
           console.error(error);
         });}}
     return(
-      <Button onClick={()=>{register()}} variant="contained">{props.ButtonName}</Button>
+      <Button sx={{borderRadius:"16px"}} onClick={()=>{register()}} variant="contained">{props.ButtonName}</Button>
     )
   }
   
   
 function SignupCard(props){
-  
+    const close1 = useSetRecoilState(onCloseSignup);
+    const close2 = useSetRecoilState(onCloseLogin);
+      function onClose(){
+        close1(false);
+        close2(false);
+      };
       return (
-        <Grid item xs={11} sm={8} md={6} lg={6} xl={6} sx={{ height:{lg:"60vh",md:"52vh", sm:"25vh", xs:"70vh"}, width:"100vw", paddingTop:{lg:"10vh", md:"30vh", sm:"25vh", xs:"25vh"}, display:"flex", justifyContent:"center"}}> 
-        <Card sx={{height:"100%", width:{lg:"40%",md:"40%", sm:"60%", xs:"70%"}}} variant="outlined">
-          <CardContent sx={{height:"100%", width:"100%"}}>
-            <Typography fontFamily={'"Times New Roman", Times, serif'} color="#007FFF" variant="h3" sx={{fontSize: { lg: 50, md: 40, sm: 25, xs: 20 },display:"flex", justifyContent:"center"}}>{props.ButtonName}</Typography>
+        <Grid  item xs={12} sm={12} md={12} lg={12} xl={12} sx={{borderRadius:"50px", height:"100%", width:"100%", display:"flex", justifyContent:"center"}}> 
+        <Card sx={{height:"100%", width:"100%"}} variant="outlined">
+          <CardContent sx={{padding:"0%",height:"100%", width:"100%", display:"flex",flexDirection:"column", justifyContent:"center"}}>
+          <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: "#007FFF"
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+            <Typography fontFamily={'"Times New Roman", Times, serif'} color="#007FFF" variant="h3" sx={{paddingTop:"2%",fontSize: { lg: 50, md: 40, sm: 25, xs: 35 },display:"flex", justifyContent:"center"}}>{props.ButtonName}</Typography>
              <UsernameBox/>
              <br/>
              <PasswordBox/>
              <br/>
-             <Box sx={{paddingTop:{lg:"1%",md:"1%",sm:"5%", xs:"6%"},paddingBottom:{sm:"3%", xs:"5%"}, height:"6%", width:"auto"}}>
+             <Box sx={{paddingTop:{lg:"2%",md:"1%",sm:"5%", xs:"3%"},paddingBottom:{sm:"3%", xs:"5%"}, height:"6%", width:"100%", display:"flex",justifyContent:"center"}}>
               <SignupButton ButtonName={props.ButtonName}/>
+              
+             </Box>
+             <Box sx={{display:"flex",justifyContent:"center"}}>
+             <p>{props.Message+" "}<Link onClick={()=>{
+              if(props.Redirect==="signup"){
+                close2(false);
+                close1(true);
+              }
+              if(props.Redirect==="login"){
+                close1(false);
+                close2(true);
+              }
+             }}>{props.Redirect}</Link></p>
              </Box>
             
-             <p>{props.Message+" "}<a href={"/" + props.Redirect}>{props.Redirect}</a></p>
+             
           </CardContent>
         </Card>
         </Grid> );

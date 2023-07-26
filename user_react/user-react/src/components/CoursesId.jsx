@@ -28,7 +28,7 @@ function Purchase(){
     
     return(
         <Grid item xs={10} sm={8} md={6} lg={4} xl={6} sx={{paddingTop:10,rowGap:2, columnGap:2, display:"flex", justifyContent:"center"}}>
-          <Card raised sx={{height:"auto",width:{xs:"100%",lg:"50%"}}}>
+          <Card raised sx={{borderRadius:"50px",height:"auto",width:{xs:"100%",lg:"50%"}}}>
             <CardUI/>
           </Card>
         </Grid>
@@ -55,7 +55,7 @@ function CardUI() {
         <Typography variant="body2" color="text.secondary">{course.description}</Typography>
         <Typography variant='h8' color="inherit">{"price: "+course.price}</Typography>
       </CardContent><CardActions sx={{ width: "auto", height: "10%" }}>
-        <Button onClick={purchase} variant="contained">purchase</Button>
+        <Button sx={{marginLeft:{lg:"42%", xs:"33%"}, borderRadius:"16px"}} onClick={purchase} variant="contained">purchase</Button>
       </CardActions></>
   )
 }
