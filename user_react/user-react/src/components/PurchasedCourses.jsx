@@ -6,6 +6,8 @@ import { Button, CardActions, Grid, Typography} from '@mui/material';
 import CardMedia from '@mui/material/CardMedia'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { purchasedState } from '../atoms/purchased';
+import { useNavigate } from 'react-router-dom';
+import Content from './Content';
 
 function PurchasedCourses(){
     const setpurchasedCourses=useSetRecoilState(purchasedState);
@@ -28,7 +30,7 @@ function PurchasedCourses(){
         const purchasedCourses = useRecoilValue(purchasedState);
         return(
             <Grid container spacing={2} style={{justifyContent:"center"}}>
-            { purchasedCourses.map((c)=> <Course key ={c._id} title={c.title} description={c.description} imageLink={c.imageLink}/>)}
+            { purchasedCourses.map((c)=> <Course key ={c._id} id={c._id} title={c.title} description={c.description} imageLink={c.imageLink}/>)}
         </Grid>
         )
     }
@@ -47,11 +49,18 @@ function PurchasedCourses(){
                 <Typography variant="body2" color="text.secondary">{props.description}</Typography>
               </CardContent>
               <CardActions>
-                <Button sx={{marginLeft:"27%", borderRadius:"16px"}} variant="contained" onClick={()=>{alert("will add this feature in future!")}}>Course details</Button>
+                <DetailsButton newid={props.id}/>
               </CardActions>
               
             </Card>
             </Grid>
+        )
+    }
+    function DetailsButton(preps){
+        const navigate = useNavigate(); 
+        const courseId=preps.newid;
+        return(
+        <Button sx={{marginLeft:"27%", borderRadius:"16px"}} variant="contained" onClick={()=>{navigate("/courses/purchased/"+courseId+"/content")}}>Course details</Button>
         )
     }
 export default PurchasedCourses;

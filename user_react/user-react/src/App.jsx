@@ -5,6 +5,8 @@ import Courses from './components/Courses';
 import PurchasedCourses from './components/PurchasedCourses';
 import Navbar from './components/Navbar';
 import { Box } from '@mui/system';
+import Content from './components/Content';
+import ContentElement from './components/contentElement';
 
 
 // const Background = styled("div")({
@@ -26,6 +28,8 @@ function App() {
         <Route path="/courses" element={<Courses />} />
         <Route path="/courses/:courseId" element={<Purchase />} />
         <Route path="/courses/purchased" element={<PurchasedCourses />} />
+        <Route path="/courses/purchased/:courseId/content" element={<Content />} />
+        <Route path="/courses/purchased/:courseId/content/:contentId" element={<ContentElement />} />
       </Routes>
       </Box>
       </Box>
