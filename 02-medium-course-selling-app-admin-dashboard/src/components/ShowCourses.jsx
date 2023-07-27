@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function ShowCourses() {
   const [courses, setCourses] = useState([]);
@@ -26,6 +27,10 @@ function ShowCourses() {
 }
 
 function Course(props) {
+  const navigate = useNavigate();
+  function addContent() {
+    navigate("/courses/" + props.id+"/content");
+  }
   return (
     <div>
       <h1>{props.title}</h1>
@@ -35,6 +40,7 @@ function Course(props) {
       <p>{props.imageLink}</p>
       <p>{props.published}</p>
       <br />
+      <button onClick={addContent}>add Content</button>
     </div>
   );
 }

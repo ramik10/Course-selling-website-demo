@@ -21,7 +21,7 @@ app.use(cookieParser());
 // ));
 // app.use(cors());
 app.use(
-  cors({origin: /*"http://localhost:5173"*/ "https://react-and-backend.vercel.app", credentials: true})
+  cors({origin: ["http://localhost:5173", "https://react-and-backend.vercel.app"], credentials: true})
 );
 // app.use(
 //   cors({origin: "https://react-and-backend-git-main-ramik10.vercel.app", credentials: true})
@@ -43,12 +43,21 @@ const courseSchema = new mongoose.Schema({
   description: String,
   price: Number,
   published: Boolean,
-  imageLink: String
+  imageLink: String,
+  content: [{type: mongoose.Schema.Types.ObjectId, ref: 'CourseDetails'}]
+});
+
+const courseDetailsSchema = new mongoose.Schema({
+    id: Number,
+    title: String,
+    description: String,
+    videoLink: String
 });
 
 const Admin = mongoose.model('Admin', adminSchema);
 const User = mongoose.model('User', userSchema);
 const Course = mongoose.model('Course', courseSchema);
+const CourseDetails = mongoose.model('CourseDetails', courseDetailsSchema);
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -76,6 +85,23 @@ const authenticateJwt = (req, res, next) => {
     res.sendStatus(401);
   }
 };
+const authenticateJwt2 = (req, res, next) => {
+  const authorization = req.headers.authorization;
+  const token = authorization.split(' ')[1];
+  if (token) {
+    jwt.verify(token, secretKey, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+
+      req.user = user;
+      next();
+    });
+  }
+  else {
+    res.sendStatus(401);
+  }
+}
 
 app.post('/admin/signup', async (req, res) => {
   const admin = req.body;
@@ -102,14 +128,23 @@ app.post('/admin/login', async (req, res) => {
   }
 });
 
-app.post('/admin/courses', authenticateJwt, async (req, res) => {
+app.post('/admin/courses', authenticateJwt2, async (req, res) => {
   const course = new Course(req.body);
   await course.save();
   // console.log(course);
   res.json({ message: 'Course created successfully', courseId: course._id });
 });
 
-app.put('/admin/courses/:courseId', authenticateJwt, async(req, res) => {
+app.post('/admin/courses/:courseId/content', authenticateJwt2, async (req, res) => {
+  const course = await Course.findById(req.params.courseId);
+  const courseDetails = new CourseDetails(req.body);
+  await courseDetails.save();
+  course.content.push(courseDetails._id);
+  await course.save();
+  res.json({ message: 'Course content created successfully' });
+});
+
+app.put('/admin/courses/:courseId', authenticateJwt2, async(req, res) => {
   const courseId = parseInt(req.params.courseId);
 
   const course = Course.findByIdAndUpdate(courseId, req.body);
@@ -121,7 +156,7 @@ app.put('/admin/courses/:courseId', authenticateJwt, async(req, res) => {
   }
 });
 
-app.get('/admin/courses', authenticateJwt, async(req, res) => {
+app.get('/admin/courses', authenticateJwt2, async(req, res) => {
   res.json({ courses: await Course.find({}) });
 });
 
@@ -143,7 +178,7 @@ app.post('/users/login', async(req, res) => {
   const user = await User.findOne({username, password});
   if (user) {
     const token = generateJwt(user);
-    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000,domain:"course-backend-29um.onrender.com",secure:true,sameSite:'none'}).json({ message: 'Logged in successfully' })
+    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000, domain:"course-backend-29um.onrender.com",secure:true,sameSite:"none"}).json({ message: 'Logged in successfully' })
   } else {
     res.status(403).json({ message: 'User authentication failed' });
   }
@@ -158,7 +193,7 @@ app.get('/users/me',authenticateJwt, (req, res) => {
 });
 
 app.get('/users/logout',authenticateJwt, (req, res) => {
-  res.clearCookie("access_token",{httpOnly:true, domain:"course-backend-29um.onrender.com",secure:true,sameSite:'none'}).json({ message: 'Logged out successfully' });
+  res.clearCookie("access_token",{httpOnly:true, domain:"course-backend-29um.onrender.com",secure:true,sameSite:"none"}).json({ message: 'Logged out successfully' });
 });
 
 
@@ -200,6 +235,56 @@ app.get('/users/purchasedCourses', authenticateJwt, async(req, res) => {
   if (user && user.purchasedCourses) {
     res.json({ purchasedCourses: user.purchasedCourses });
   } else {
+    res.status(404).json({ message: 'No courses purchased' });
+  }
+});
+app.get('/users/purchasedCourses/:courseId', authenticateJwt, async(req, res) => {
+  const user = await User.findOne({username:req.user.username}).populate('purchasedCourses');
+  if (user && user.purchasedCourses) {
+    const course = user.purchasedCourses.find(c=>c._id==req.params.courseId)
+    if(course){
+      const courseContent = await Course.findById(req.params.courseId).populate('content');
+    
+    if(courseContent){
+      res.json({course:courseContent});
+    }
+    else{
+      res.status(401).json({ message: 'Course not found' });
+    }
+  }
+  else{
+    res.status(402).json({ message: 'Course not purchased' });
+  }
+  }
+  else {
+    res.status(404).json({ message: 'No courses purchased' });
+  }
+});
+app.get('/users/purchasedCourses/:courseId/:contentId', authenticateJwt, async(req, res) => {
+  const user = await User.findOne({username:req.user.username}).populate('purchasedCourses');
+  if (user && user.purchasedCourses) {
+    const course = user.purchasedCourses.find(c=>c._id==req.params.courseId)
+    if(course){
+      const courseContent = await Course.findById(req.params.courseId).populate('content');
+    
+    if(courseContent){
+      const content = courseContent.content.find(c=>c._id==req.params.contentId);
+      if(content){
+        res.json({content});
+      }
+      else{
+        res.status(404).json({ message: 'Content not found' });
+      }
+    }
+    else{
+      res.status(404).json({ message: 'Course not found' });
+    }
+  }
+  else{
+    res.status(404).json({ message: 'Course not purchased' });
+  }
+  }
+  else {
     res.status(404).json({ message: 'No courses purchased' });
   }
 });
