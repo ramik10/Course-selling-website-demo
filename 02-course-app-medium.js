@@ -1,4 +1,5 @@
 const express = require('express');
+const z = require('zod');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
@@ -70,7 +71,7 @@ const generateJwt = (user) => {
 
 const authenticateJwt = (req, res, next) => {
   // console.log(req.headers);
-  const token = req.cookies.access_token;
+  const token = req.cookies.access_token
 
   if (token) {
     jwt.verify(token, secretKey, (err, user) => {
@@ -83,8 +84,7 @@ const authenticateJwt = (req, res, next) => {
     });
   } else {
     res.sendStatus(401);
-  }
-};
+  }}
 const authenticateJwt2 = (req, res, next) => {
   const authorization = req.headers.authorization;
   const token = authorization.split(' ')[1];
@@ -160,28 +160,41 @@ app.get('/admin/courses', authenticateJwt2, async(req, res) => {
   res.json({ courses: await Course.find({}) });
 });
 
+const userDetails = z.object({
+  username: z.string().min(1).max(20),
+  password: z.string().min(1).max(10),
+});
+
 app.post('/users/signup', async(req, res) => {
-  const user = req.body;
-  const existingUser = await User.findOne(user);
+  const user = userDetails.safeParse(req.body);
+  if(!user.success) {
+    res.status(400).json({ message: 'Invalid user details' });
+  }
+  else{
+  const existingUser = await User.findOne(user.data);
   // console.log(user);
   if (existingUser) {
     res.status(403).json({ message: 'User already exists' });
   } else {
-    const newUser = new User({"username":user.username, "password":user.password});
+    const newUser = new User({"username":user.data.username, "password":user.data.password});
     await newUser.save();
-    const token = generateJwt(user);
-    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000,domain:"course-backend-29um.onrender.com",secure:true,sameSite:"none"}).json({ message: 'User created successfully'});
-  }
+    const token = generateJwt(user.data);
+    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000,/*domain:"course-backend-29um.onrender.com",*/secure:true,sameSite:"none"}).json({ message: 'User created successfully'});
+  }}
 });
 app.post('/users/login', async(req, res) => {
-  const { username, password } = req.body;
-  const user = await User.findOne({username, password});
-  if (user) {
-    const token = generateJwt(user);
-    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000, domain:"course-backend-29um.onrender.com",secure:true,sameSite:"none"}).json({ message: 'Logged in successfully' })
+  const user = userDetails.safeParse(req.body);
+  if(!user.success) {
+    res.status(400).json({ message: 'Invalid user details' });
+  }
+  else{
+  const existingUser = await User.findOne(user.data);
+  if (existingUser) {
+    const token = generateJwt(user.data);
+    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000, /*domain:"course-backend-29um.onrender.com",*/secure:true,sameSite:"none"}).json({ message: 'Logged in successfully' })
   } else {
     res.status(403).json({ message: 'User authentication failed' });
-  }
+  }}
 });
 app.get('/users/me',authenticateJwt, (req, res) => {
   const user = req.user.username;
@@ -193,7 +206,7 @@ app.get('/users/me',authenticateJwt, (req, res) => {
 });
 
 app.get('/users/logout',authenticateJwt, (req, res) => {
-  res.clearCookie("access_token",{httpOnly:true, domain:"course-backend-29um.onrender.com",secure:true,sameSite:"none"}).json({ message: 'Logged out successfully' });
+  res.clearCookie("access_token",{httpOnly:true, /*domain:"course-backend-29um.onrender.com",*/secure:true,sameSite:"none"}).json({ message: 'Logged out successfully' });
 });
 
 
