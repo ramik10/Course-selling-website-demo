@@ -53,7 +53,7 @@ function SignupButton(props){
      
       if((username!=="")&&(password!=="")){
       axios.post(import.meta.env.VITE_URL_KEYR+"/users/"+props.ButtonName.toLowerCase(),
-         { username, password},{withCredentials:true}
+         { username, password}
       ).then((res)=>{
           const token = res.data.authorization;
           localStorage.setItem("token", token)
@@ -61,7 +61,7 @@ function SignupButton(props){
           // tokenPresent(true)
           console.log(res.status)
           console.log(res.data.message)
-          navigate("/courses")
+          navigate("/courses");
       }).catch((error) => {
           console.error(error);
         });}}

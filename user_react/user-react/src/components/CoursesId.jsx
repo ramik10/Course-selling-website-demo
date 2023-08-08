@@ -15,9 +15,7 @@ function Purchase(){
     const setCourse = useSetRecoilState(courseState);
     React.useEffect(() => {
         axios
-          .get(import.meta.env.VITE_URL_KEYR+"/users/courses/"+courseId, {
-            withCredentials: true,
-          })
+          .get(import.meta.env.VITE_URL_KEYR+"/users/courses/"+courseId, {headers:{"authorization": "Bearer "+localStorage.getItem("token")}})
           .then((res) => {
             // console.log(res.data);
             setCourse(res.data);
@@ -39,9 +37,7 @@ function CardUI() {
   const course = useRecoilValue(courseState);
   const purchase=()=>{
     // console.log(localStorage.getItem("token"))
-    axios.post(import.meta.env.VITE_URL_KEYR+"/users/courses/"+courseId,null,{
-        withCredentials: true,
-    }).then((response)=>{
+    axios.post(import.meta.env.VITE_URL_KEYR+"/users/courses/"+courseId,null, {headers:{"authorization": "Bearer "+localStorage.getItem("token")}}).then((response)=>{
         alert(response.data.message);
     })}
   return (

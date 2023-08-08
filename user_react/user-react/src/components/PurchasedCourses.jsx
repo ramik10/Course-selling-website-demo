@@ -7,14 +7,12 @@ import CardMedia from '@mui/material/CardMedia'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { purchasedState } from '../atoms/purchased';
 import { useNavigate } from 'react-router-dom';
-import Content from './Content';
+
 
 function PurchasedCourses(){
     const setpurchasedCourses=useSetRecoilState(purchasedState);
     React.useEffect(()=>{
-        axios.get(import.meta.env.VITE_URL_KEYR+"/users/purchasedCourses",{
-            withCredentials: true
-        }).then((res)=>{
+        axios.get(import.meta.env.VITE_URL_KEYR+"/users/purchasedCourses", {headers:{"authorization": "Bearer "+localStorage.getItem("token")}}).then((res)=>{
             // console.log(res.data)
             setpurchasedCourses(res.data.purchasedCourses);
         })

@@ -6,7 +6,7 @@ import { Box, Card, Typography } from "@mui/material";
 function ContentElement(){
     const { courseId, contentId } = useParams();
     const [ContentElement, setContentElement] = React.useState({});
-        axios.get(import.meta.env.VITE_URL_KEYR+"/users/purchasedCourses/"+courseId+"/"+contentId,{withCredentials:true}).then((response) => {
+        axios.get(import.meta.env.VITE_URL_KEYR+"/users/purchasedCourses/"+courseId+"/"+contentId, {headers:{"authorization": "Bearer "+localStorage.getItem("token")}}).then((response) => {
             setContentElement(response.data.content);
         })
     return (

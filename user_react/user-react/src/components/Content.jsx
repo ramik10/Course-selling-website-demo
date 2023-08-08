@@ -7,7 +7,7 @@ function Content(){
     const {courseId} = useParams();
     const [content, setContent] = React.useState([]);
     React.useEffect(() => {
-        axios.get(import.meta.env.VITE_URL_KEYR+"/users/purchasedCourses/"+courseId,{withCredentials:true}).then((response) => {
+        axios.get(import.meta.env.VITE_URL_KEYR+"/users/purchasedCourses/"+courseId,{headers:{"authorization": "Bearer "+localStorage.getItem("token")}}).then((response) => {
             setContent(response.data.course.content);
         })
     }, []);

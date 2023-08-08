@@ -22,7 +22,7 @@ app.use(cookieParser());
 // ));
 // app.use(cors());
 app.use(
-  cors({origin: ["http://localhost:5173", "https://react-and-backend.vercel.app"], credentials: true})
+  cors({origin: ["http://localhost:5173", "https://react-and-backend.vercel.app"]})
 );
 // app.use(
 //   cors({origin: "https://react-and-backend-git-main-ramik10.vercel.app", credentials: true})
@@ -70,22 +70,6 @@ const generateJwt = (user) => {
 };
 
 const authenticateJwt = (req, res, next) => {
-  // console.log(req.headers);
-  const token = req.cookies.access_token
-
-  if (token) {
-    jwt.verify(token, secretKey, (err, user) => {
-      if (err) {
-        return res.sendStatus(403);
-      }
-
-      req.user = user;
-      next();
-    });
-  } else {
-    res.sendStatus(401);
-  }}
-const authenticateJwt2 = (req, res, next) => {
   const authorization = req.headers.authorization;
   const token = authorization.split(' ')[1];
   if (token) {
@@ -128,14 +112,14 @@ app.post('/admin/login', async (req, res) => {
   }
 });
 
-app.post('/admin/courses', authenticateJwt2, async (req, res) => {
+app.post('/admin/courses', authenticateJwt, async (req, res) => {
   const course = new Course(req.body);
   await course.save();
   // console.log(course);
   res.json({ message: 'Course created successfully', courseId: course._id });
 });
 
-app.post('/admin/courses/:courseId/content', authenticateJwt2, async (req, res) => {
+app.post('/admin/courses/:courseId/content', authenticateJwt, async (req, res) => {
   const course = await Course.findById(req.params.courseId);
   const courseDetails = new CourseDetails(req.body);
   await courseDetails.save();
@@ -144,7 +128,7 @@ app.post('/admin/courses/:courseId/content', authenticateJwt2, async (req, res) 
   res.json({ message: 'Course content created successfully' });
 });
 
-app.put('/admin/courses/:courseId', authenticateJwt2, async(req, res) => {
+app.put('/admin/courses/:courseId', authenticateJwt, async(req, res) => {
   const courseId = parseInt(req.params.courseId);
 
   const course = Course.findByIdAndUpdate(courseId, req.body);
@@ -156,7 +140,7 @@ app.put('/admin/courses/:courseId', authenticateJwt2, async(req, res) => {
   }
 });
 
-app.get('/admin/courses', authenticateJwt2, async(req, res) => {
+app.get('/admin/courses', authenticateJwt, async(req, res) => {
   res.json({ courses: await Course.find({}) });
 });
 
@@ -179,7 +163,7 @@ app.post('/users/signup', async(req, res) => {
     const newUser = new User({"username":user.data.username, "password":user.data.password});
     await newUser.save();
     const token = generateJwt(user.data);
-    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000,/*domain:"course-backend-29um.onrender.com",*/secure:true,sameSite:"none"}).json({ message: 'User created successfully'});
+    res.json({ message: 'User created successfully', "authorization": token});
   }}
 });
 app.post('/users/login', async(req, res) => {
@@ -191,7 +175,7 @@ app.post('/users/login', async(req, res) => {
   const existingUser = await User.findOne(user.data);
   if (existingUser) {
     const token = generateJwt(user.data);
-    res.cookie("access_token",token,{httpOnly:true, maxAge:3600000, /*domain:"course-backend-29um.onrender.com",*/secure:true,sameSite:"none"}).json({ message: 'Logged in successfully' })
+    res.json({ message: 'Logged in successfully', "authorization": token })
   } else {
     res.status(403).json({ message: 'User authentication failed' });
   }}
@@ -205,9 +189,6 @@ app.get('/users/me',authenticateJwt, (req, res) => {
   }
 });
 
-app.get('/users/logout',authenticateJwt, (req, res) => {
-  res.clearCookie("access_token",{httpOnly:true, /*domain:"course-backend-29um.onrender.com",*/secure:true,sameSite:"none"}).json({ message: 'Logged out successfully' });
-});
 
 
 app.get('/users/courses', authenticateJwt, async(req, res) => {
