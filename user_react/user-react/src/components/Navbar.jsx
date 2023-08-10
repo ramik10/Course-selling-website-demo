@@ -31,10 +31,8 @@ export default function Navbar() {
     
         <><AppBar  position="fixed" sx={{bgcolor:"#242424", zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar sx={{ justifyContent: 'flex-start', width: "auto" }}>
-          <Typography color="#2196f3" variant="h5" component="div" sx={{ display: { xs: "none", lg: "block" }, flexGrow: 1 }}>
-            COURSERA
-          </Typography>
-          <TokenDepend />
+            <Box component="img" src="/My project-1.png" sx={{paddingRight:"88vw", display: { xs: 'none', lg: 'block' }, width:"50px", padding:"none"}}></Box>
+           <TokenDepend />
         </Toolbar>
       </AppBar><Drawer
         variant="permanent"
