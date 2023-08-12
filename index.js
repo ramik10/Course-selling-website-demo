@@ -155,8 +155,7 @@ app.post('/users/signup', async(req, res) => {
     res.status(400).json({ message: 'Invalid user details' });
   }
   else{
-  const existingUser = await User.findOne(user.data);
-  // console.log(user);
+  const existingUser = await User.findOne({"username":user.data.username});
   if (existingUser) {
     res.status(403).json({ message: 'User already exists' });
   } else {
